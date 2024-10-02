@@ -85,7 +85,7 @@ export const AuthComponent = () => {
 
    return (
       <div className="flex justify-center items-center min-h-screen">
-         <div className="card w-full p-6 bg-white justify-center shadow-lg rounded-xl">
+         <div className="card w-full p-6 bg-white justify-center text-center shadow-lg rounded-xl space-y-8">
             <h1 className="text-4xl text-blue-600 font-bold text-center mb-2">AirQ54</h1>
             <p className="text-center text-gray-500 mb-6">Votre plateforme d'information sur la Qualité de l'Air</p>
 

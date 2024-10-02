@@ -75,13 +75,13 @@ export const DataTableComponent = () => {
    return (
       <Card
          className="text-center"
-         title={"Données aggrégées par heure des différentes stations"}
+         title={"Données aggrégées par heure depuis les deux stations"}
       >
          <SelectButton
             value={isStation1Up}
             options={[
-               { label: "Station 1", value: true },
-               { label: "Station 2", value: false },
+               { label: "SMART188", value: true },
+               { label: "SMART189", value: false },
             ]}
             onChange={(e) => setIsStation1Up(e.value)}
          />
@@ -103,7 +103,7 @@ export const DataTableComponent = () => {
                "pm25",
             ]}
             header={header}
-            emptyMessage="Aucune donnée trouvée"
+            emptyMessage="Aucune donnée collectée"
          >
             <Column
                header="DateTime"

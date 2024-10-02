@@ -10,4 +10,4 @@ RUN npm install --frozen-lockfile
 
 COPY . .
 
-CMD npx prisma db push && npm run dev
+CMD npx prisma db pull && npx prisma db push && npm run dev
