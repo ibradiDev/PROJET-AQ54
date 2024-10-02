@@ -16,7 +16,7 @@ L'application (AirQ54) va nous permettre de consulter ces données agrégées (p
 
 - [React JS](https://react.dev/)
 - [Prime React](https://primereact.org/) pour l'interface utilisateur
-- [AG Grid](https://primereact.org/datatable/#basic_filter) pour la table des données
+- [PrimeReact DataTable](https://primereact.org/datatable/#basic_filter) pour la table des données
 - [PrimeReact Charts](https://primereact.org/chart/#line) pour la visualisation graphique des données en temps réel
 - [Axios](https://axios-http.com/) pour les requêtes HTTP
 
