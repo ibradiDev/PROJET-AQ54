@@ -1,0 +1,119 @@
+<!-- ======================================== -->
+<!-- ======================================== -->
+<!-- ======================================== -->
+
+# PROJET AQ54 (Air Quality 54)
+
+## Description
+
+AQ54 (Air Quality 54) est une application web de visualisation des données portant sur la qualité de l'air à Abidjan. Des capteurs Airgino, collecteurs de données, ont été déployés pour collecter les données sur les particules fines se trouvant dans l'air autour d'un périmètre de 300m.
+
+L'application (AirQ54) va nous permettre de consulter ces données agrégées (par heure et/ou par jour) des différents capteurs sur un intervalle de temps spécifique.
+
+## Technologies utilisées
+
+### Frontend (aq54-frontend)
+
+- [React JS](https://react.dev/)
+- [Prime React](https://primereact.org/) pour l'interface utilisateur
+- [AG Grid](https://primereact.org/datatable/#basic_filter) pour la table des données
+- [PrimeReact Charts](https://primereact.org/chart/#line) pour la visualisation graphique des données en temps réel
+- [Axios](https://axios-http.com/) pour les requêtes HTTP
+
+### Backend (aq54-backend)
+
+- [NestJS](https://nestjs.com/)
+
+### Base de données (AQ54_DATABASE)
+
+- [PostgreSQL](https://www.postgresql.org/)
+
+### Autres technologies
+
+- [Docker](https://www.docker.com/) pour la conteneurisation du projet
+- [Firebase](https://firebase.google.com/) pour l'authentification
+
+## Structure du projet
+
+Le projet est divisé en deux parties principales :
+
+1. aq54-frontend: Application côté client (React)
+2. aq54-backend: Application côté serveur (NestJS)
+
+## Prérequis
+
+- [Node.js](https://nodejs.org/en) (version 10.0.0 ou supérieure)
+- [Git](https://git-scm.com/)
+- [Docker](https://www.docker.com/) et Docker Compose
+- Compte [Firebase](https://firebase.google.com/)
+
+IMPORTANT:
+Avoir installer `Docker Desktop` avec une version recente de préférence et Node.js au moins à la version `v17.0.0`.
+
+## Vérification des dépendances
+
+```zsh
+docker --version
+docker compose version
+```
+
+```zsh
+node --version
+```
+
+## Installation et démarrage
+
+1. Clonez ce dépôt :
+
+   ```
+   git clone https://github.com/ibradiDev/PROJET-AQ54.git
+   cd PROJET-AQ54
+   ```
+
+2. Configurez les variables d'environnement :
+
+- A la racine du dossier et `aq54-backend`, copier et coller le fichier `.env.example` et renommez la copie en `.env`
+
+#### Exécution
+
+3. Lancez l'application avec Docker Compose :
+
+IMPORTANT:
+
+```
+docker compose up
+```
+
+4. L'application cliente sera accessible à l'adresse :
+   - http://localhost:5173
+
+## Utilisation de l'application
+
+Inscription & Connexion:
+
+- Accédez à l'application via http://localhost:5173
+- Renseignez les champs selon l'option le plus approprié
+
+## API
+
+L'API Airgino fournit des données portant sur la qualité de l'air depuis deux stations (SMART188 & SMART189) où sont placés des capteurs.
+
+URL de l'API : https://airqino-api.magentalab.it/
+
+## Fonctionnalités
+
+- Authentification utilisateur (Inscription & Connexion)
+- Visualisation des données de la qualité de l'air en temps réel avec le graphique et celle des données agrégées par heure dans la table de données
+- Filtrage des informations dans la table de données selon ce que l'on veut voir
+
+## Auteur
+
+[Ibrahim DIARRASSOUBA](https://github.com/ibradiDev)
+
+## Licence
+
+## Contact
+
+Ibrahim DIARRASSOUBA - [ibradi.dev@gmail.com](mailto:ibradi.dev@gmail.com)
+
+Lien du projet : [https://github.com/ibradiDev/PROJET-AQ54](https://github.com/ibradiDev/PROJET-AQ54)

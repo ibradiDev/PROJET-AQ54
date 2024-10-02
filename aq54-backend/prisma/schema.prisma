@@ -1,0 +1,43 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl"]
+}
+
+model StationData {
+  id           String   @id @default(cuid())
+  station_name String
+  extT         Float    @default(0)
+  rh           Float    @default(0)
+  o3           Float    @default(0)
+  no2          Float    @default(0)
+  co           Float    @default(0)
+  pm25         Float    @default(0)
+  pm10         Float    @default(0)
+  timestamp    String
+  createdAt    DateTime @default(now())
+}
+
+model StationHourlyAvg {
+  id           String   @id @default(cuid())
+  station_name String
+  extT         Float    @default(0)
+  rh           Float    @default(0)
+  o3           Float    @default(0)
+  no2          Float    @default(0)
+  co           Float    @default(0)
+  pm25         Float    @default(0)
+  pm10         Float    @default(0)
+  timestamp    String
+  createdAt    DateTime @default(now())
+}
