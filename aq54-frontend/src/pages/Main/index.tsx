@@ -14,46 +14,6 @@ export default function Main() {
    const [errorMsg, setErrorMsg] = useState("");
 
    const navigate = useNavigate();
-
-
-   useEffect(() => {
-      const fetchData = async () => {
-         try {
-            const response = await getCurrentValues();
-
-            if (response) {
-               const { currentStation1, currentStation2 } = response;
-               setCurrentStation1(currentStation1);
-               setCurrentStation2(currentStation2);
-               setLoading(false);
-            } else {
-               console.error("Aucune donnée renvoyée");
-            }
-         } catch (err) {
-            console.error(
-               "Erreur lors de la récupération des données :",
-               err
-            );
-            const timeoutId = setTimeout(() => {
-               setLoading(false);
-               setErrorMsg(
-                  "Impossible de récupérer les données. Veuillez vérifier votre connexion internet ou rechargez la page."
-               );
-            }, 10000);
-
-
-            return () => clearTimeout(timeoutId);
-         }
-      };
-      fetchData();
-
-      // Lancer la requête chaque 3 min
-      const intervalId = setInterval(fetchData, 180000);
-
-      // Quand le composant se demonte
-      return () => clearInterval(intervalId);
-   }, []);
-
    useEffect(() => {
       const unsubscribe = auth.onAuthStateChanged((user) => {
          if (!user) navigate("/security/auth");
@@ -61,6 +21,23 @@ export default function Main() {
 
       return () => unsubscribe();
    }, [navigate]);
+
+   useEffect(() => {
+      const fetchData = async () => {
+         const response = await getCurrentValues();
+         if (!response) return;
+         const { station1, station2 } = response;
+         setLoading(false);
+         setCurrentStation1(station1);
+         setCurrentStation2(station2);
+      }
+      fetchData();
+      // Lancer la requête chaque 3 min
+      const intervalId = setInterval(fetchData, 180000);
+      // Quand le composant se demonte
+      return () => clearInterval(intervalId);
+   }, []);
+
 
    return (
       <div

@@ -1,5 +1,6 @@
 import { chartDataType, stationDataType } from "./types";
-export default function chartConfig(
+
+export default function getChartConfig(
   currentStation1: stationDataType | undefined,
   currentStation2: stationDataType | undefined
 ) {

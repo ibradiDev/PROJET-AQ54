@@ -15,11 +15,11 @@ export const getHourlyAvg = async () => {
 export const getCurrentValues = async () => {
   try {
     const response = await axios.get(`${DATA_API}/current`);
-    const currentStation1: stationDataType = response.data.currentStation1;
-    const currentStation2: stationDataType = response.data.currentStation2;
-    return { currentStation1, currentStation2 };
+    const station1: stationDataType = response.data.currentStation1;
+    const station2: stationDataType = response.data.currentStation2;
+    return { station1, station2 };
   } catch (err) {
-    console.error();
+    console.error(err);
     return;
   }
 };

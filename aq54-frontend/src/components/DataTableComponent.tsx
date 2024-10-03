@@ -41,9 +41,9 @@ export const DataTableComponent = () => {
 
       fetchData();
       // Lancer la requête chaque 1h2min
-      const intervalId = setInterval(fetchData, 3720000);
+      const intervalId = setInterval(fetchData, 18000);
       return () => clearInterval(intervalId);
-   }, []);
+   }, [hourlyAvgStation1, hourlyAvgStation2,]);
 
    const onGlobalFilterChange = (e: any) => {
       const value = e.target.value;
@@ -103,7 +103,7 @@ export const DataTableComponent = () => {
                "pm25",
             ]}
             header={header}
-            emptyMessage="Aucune donnée collectée"
+            emptyMessage="Aucune donnée"
          >
             <Column
                header="DateTime"

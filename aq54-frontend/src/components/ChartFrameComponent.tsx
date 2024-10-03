@@ -4,7 +4,7 @@ import { Chart } from 'primereact/chart';
 import { DataTableComponent } from './DataTableComponent';
 import { Card } from 'primereact/card';
 import { Dropdown } from 'primereact/dropdown';
-import chartConfig from '../configs/chart-config';
+import getChartConfig from '../configs/chart-config';
 import { stationDataType } from '../configs/types';
 
 export default function ChartFrameComponent({ currentStation1, currentStation2 }: { currentStation1: stationDataType | undefined, currentStation2: stationDataType | undefined }) {
@@ -17,13 +17,10 @@ export default function ChartFrameComponent({ currentStation1, currentStation2 }
       { label: "Bar", value: "bar" },
    ];
 
-
    useEffect(() => {
-
-      const chartConf = chartConfig(currentStation1, currentStation2)
-
-      const data = chartConf?.data
-      const options = chartConf?.options
+      const chartConfig = getChartConfig(currentStation1, currentStation2)
+      const data = chartConfig?.data
+      const options = chartConfig?.options
 
       setChartData(data);
       setChartOptions(options);

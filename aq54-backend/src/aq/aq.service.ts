@@ -103,14 +103,12 @@ export class AqService implements OnApplicationBootstrap {
       // Vérification si les données existent déjà pour les station 1 & 2
       const existedValueS1 = await this.prisma.stationData.findFirst({
         where: {
-          timestamp: station1Data.timestamp,
-          station_name: station1Data.station_name,
+          ...station1Data,
         },
       });
       const existedValueS2 = await this.prisma.stationData.findFirst({
         where: {
-          timestamp: station2Data.timestamp,
-          station_name: station2Data.station_name,
+          ...station2Data,
         },
       });
 
@@ -154,16 +152,16 @@ export class AqService implements OnApplicationBootstrap {
       // Vérification pour la station 1
       const existedValueS1 = await this.prisma.stationHourlyAvg.findFirst({
         where: {
-          timestamp: lastS1HourlyAvg.timestamp,
           station_name: STATION_1_NAME,
+          ...lastS1HourlyAvg,
         },
       });
 
       // Vérification pour la station 2
       const existedValueS2 = await this.prisma.stationHourlyAvg.findFirst({
         where: {
-          timestamp: lastS2HourlyAvg.timestamp,
           station_name: STATION_2_NAME,
+          ...lastS2HourlyAvg,
         },
       });
 
