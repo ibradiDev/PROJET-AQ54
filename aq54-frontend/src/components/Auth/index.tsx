@@ -1,14 +1,14 @@
-import { AuthErrorCodes, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { AuthErrorCodes, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { Button } from 'primereact/button';
 import { FloatLabel } from 'primereact/floatlabel';
 import { InputText } from 'primereact/inputtext';
 import { Message } from 'primereact/message';
 import { useState } from 'react';
-import { auth } from '../../firebase';
+import { auth } from '../../firebase-config';
 
 export const AuthComponent = () => {
    const [loading, setLoading] = useState(false);
-   const [isRegister, setIsRegister] = useState(false);
+   const [isRegisterForm, setIsRegisterForm] = useState(false);
    const [error, setError] = useState("");
 
    const [credentials, setCredentials] = useState({
@@ -22,7 +22,7 @@ export const AuthComponent = () => {
    const isFormSwitch = () => {
       setError("");
       setCredentials({ email: "", password: "", confirmPassword: "" });
-      setIsRegister(!isRegister);
+      setIsRegisterForm(!isRegisterForm);
    };
 
    const handleFormChange = (e: { target: { name: any; value: any } }) => {
@@ -32,7 +32,7 @@ export const AuthComponent = () => {
    const isFormValid = () => {
       setError("");
       const { email, password, confirmPassword } = credentials;
-      if (isRegister) {
+      if (isRegisterForm) {
          if (password !== confirmPassword) {
             setError("Les mots de passe ne correspondent pas.");
             return false;
@@ -53,12 +53,24 @@ export const AuthComponent = () => {
       }
    };
 
+   const handleGoogleSignIn = async () => {
+      setLoading(true);
+      const provider = new GoogleAuthProvider();
+      try {
+         await signInWithPopup(auth, provider);
+      } catch (error) {
+         setError("Erreur lors de la connexion avec Google. Veuillez réessayer.");
+      } finally {
+         setLoading(false);
+      }
+   };
+
    const handleSubmit = async (e: { preventDefault: () => void }) => {
       e.preventDefault();
       load();
 
       const { email, password } = credentials;
-      if (isRegister) {
+      if (isRegisterForm) {
          if (isFormValid()) {
             await createUserWithEmailAndPassword(auth, email, password).catch(() => {
                if (AuthErrorCodes.EMAIL_EXISTS) setError("Ce compte existe déjà");
@@ -121,7 +133,7 @@ export const AuthComponent = () => {
                </FloatLabel>
             </div>
 
-            {isRegister && (
+            {isRegisterForm && (
                <div className="card flex justify-center mt-4">
                   <FloatLabel className="w-full">
                      <InputText
@@ -136,7 +148,7 @@ export const AuthComponent = () => {
                </div>
             )}
 
-            <div className="card flex flex-col justify-center gap-3 mt-6">
+            <div className="card flex flex-col justify-content-center gap-3 mt-6">
                <Button
                   label="Soumettre"
                   rounded
@@ -147,8 +159,14 @@ export const AuthComponent = () => {
                   onClick={handleSubmit}
                />
                <Button
+                  label="Se connecter avec Google"
+                  icon="pi pi-google"
+                  className="w-full p-button-outlined p-button-secondary"
+                  onClick={handleGoogleSignIn}
+               />
+               <Button
                   onClick={isFormSwitch}
-                  label={isRegister ? "J'ai déjà un compte" : "Je n'ai pas de compte"}
+                  label={isRegisterForm ? "J'ai déjà un compte" : "Je n'ai pas de compte"}
                   severity="info"
                   text
                   className="mt-4 text-blue-600 hover:text-blue-700"

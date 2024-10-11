@@ -9,6 +9,7 @@ import { SelectButton } from "primereact/selectbutton";
 import { useState, useEffect } from 'react';
 import { getHourlyAvg } from "../services/services";
 
+
 export const DataTableComponent = () => {
    const [hourlyAvgStation1, setHourlyAvgStation1] = useState(null);
    const [hourlyAvgStation2, setHourlyAvgStation2] = useState(null);
@@ -22,28 +23,30 @@ export const DataTableComponent = () => {
       pm10: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
       pm25: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
    });
-   const [loading, setLoading] = useState(true);
+   const [_loading, setLoading] = useState(true);
    const [isStation1Up, setIsStation1Up] = useState(true);
    const [globalFilterValue, setGlobalFilterValue] = useState("");
 
+
    useEffect(() => {
       const fetchData = async () => {
+         setLoading(true);
          const response = await getHourlyAvg();
          if (response) {
             const { hourlyDataStation1, hourlyDataStation2 } = response;
             setHourlyAvgStation1(hourlyDataStation1);
             setHourlyAvgStation2(hourlyDataStation2);
-            setLoading(false);
-         } else {
-            // console.error("Aucune donnée trouvée");
          }
+         setLoading(false);
       };
-
       fetchData();
-      // Lancer la requête chaque 1h2min
+
+      // Mettre à jour les données toutes les 3 minutes
       const intervalId = setInterval(fetchData, 18000);
+
       return () => clearInterval(intervalId);
-   }, [hourlyAvgStation1, hourlyAvgStation2,]);
+   }, []);
+
 
    const onGlobalFilterChange = (e: any) => {
       const value = e.target.value;
@@ -92,7 +95,7 @@ export const DataTableComponent = () => {
             dataKey="id"
             filters={filters}
             filterDisplay="row"
-            loading={loading}
+            // loading={loading}
             globalFilterFields={[
                "timestamp",
                "extT",

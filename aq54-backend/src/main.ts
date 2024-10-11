@@ -1,10 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import {
-  DocumentBuilder,
-  SwaggerDocumentOptions,
-  SwaggerModule,
-} from '@nestjs/swagger';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { FirebaseAuthGuard } from './firebase/firebase-auth.guard';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -21,9 +19,17 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
+  app.useGlobalGuards(new FirebaseAuthGuard());
+  app.useGlobalPipes(new ValidationPipe());
+
+  app.use((_req, res, next) => {
+    res.header('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
+    next();
+  });
+
   app.enableCors({
     origin: '*',
-    methods: 'GET,HEAD',
+    methods: 'GET,OPTIONS',
     credentials: true,
   });
 

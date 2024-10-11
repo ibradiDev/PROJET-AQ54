@@ -14,6 +14,7 @@ services:
       - my-network
 
   backend:
+    restart: always
     container_name: backend-nestjs
     build:
       context: ./aq54-backend

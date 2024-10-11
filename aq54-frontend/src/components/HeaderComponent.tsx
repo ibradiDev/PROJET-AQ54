@@ -1,11 +1,12 @@
 import { signOut } from 'firebase/auth';
 import { Button } from 'primereact/button';
-import { auth } from '../firebase';
+import { auth } from '../firebase-config';
 
 export const HeaderComponent = () => {
    const handleLogout = async () => {
       await signOut(auth);
    };
+   
    return (
       <div className="">
          <header
@@ -26,7 +27,7 @@ export const HeaderComponent = () => {
                   label="Se deconnecter"
                   severity="danger"
                   color="#fff"
-                  rounded 
+                  rounded
                   onClick={handleLogout}
                />
             </div>

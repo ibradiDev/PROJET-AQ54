@@ -3,12 +3,19 @@ import axios from 'axios';
 import { PrismaService } from '../prisma.service';
 import { StationDataDto } from 'src/dto/station-data.dto';
 import { Cron, Interval } from '@nestjs/schedule';
+import { ConfigService } from '@nestjs/config';
 
-const AQ_API = 'https://airqino-api.magentalab.it/';
-const STATION_1_NAME: string = 'SMART188';
-const STATION_1_ID: number = 283164601;
-const STATION_2_NAME: string = 'SMART189';
-const STATION_2_ID = 283181971;
+
+const configService = new ConfigService();
+const AQ_API = axios.create({ baseURL: configService.get<string>('AQ_API') });
+const STATION_1_NAME: string = configService.get<string>('STATION_1_NAME');
+const STATION_1_ID: number = Number.parseInt(
+  configService.get<string>('STATION_1_ID'),
+);
+const STATION_2_NAME: string = configService.get<string>('STATION_2_NAME');
+const STATION_2_ID: number = Number.parseInt(
+  configService.get<string>('STATION_2_ID'),
+);
 
 @Injectable()
 export class AqService implements OnApplicationBootstrap {
@@ -74,8 +81,8 @@ export class AqService implements OnApplicationBootstrap {
   private async setCurrentsValues() {
     try {
       // Récupération des données pour les stations depuis l'API
-      const station1 = await axios.get(`${AQ_API}/getCurrentValues/SMART188`);
-      const station2 = await axios.get(`${AQ_API}/getCurrentValues/SMART189`);
+      const station1 = await AQ_API.get(`/getCurrentValues/SMART188`);
+      const station2 = await AQ_API.get(`/getCurrentValues/SMART189`);
 
       let partialStation1Data: StationDataDto = new StationDataDto();
       let partialStation2Data: StationDataDto = new StationDataDto();
@@ -153,7 +160,7 @@ export class AqService implements OnApplicationBootstrap {
       const existedValueS1 = await this.prisma.stationHourlyAvg.findFirst({
         where: {
           station_name: STATION_1_NAME,
-          ...lastS1HourlyAvg,
+          timestamp: lastS1HourlyAvg.timestamp,
         },
       });
 
@@ -161,7 +168,7 @@ export class AqService implements OnApplicationBootstrap {
       const existedValueS2 = await this.prisma.stationHourlyAvg.findFirst({
         where: {
           station_name: STATION_2_NAME,
-          ...lastS2HourlyAvg,
+          timestamp: lastS2HourlyAvg.timestamp,
         },
       });
 
@@ -224,9 +231,7 @@ export class AqService implements OnApplicationBootstrap {
   }: {
     station_id: number;
   }): Promise<StationDataDto> {
-    const response = await axios.get(
-      `${AQ_API}/v3/getStationHourlyAvg/${station_id}`,
-    );
+    const response = await AQ_API.get(`/v3/getStationHourlyAvg/${station_id}`);
     const lastHourlyAvg = response.data.data.slice(-1)[0];
     const lastStationHourlyAvg: StationDataDto = {
       station_name: response.data.header.station_name,

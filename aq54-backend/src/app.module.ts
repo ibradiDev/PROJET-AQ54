@@ -6,10 +6,23 @@ import { AqModule } from './aq/aq.module';
 import { UserController } from './user/user.controller';
 import { UserModule } from './user/user.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { ConfigModule } from '@nestjs/config';
+import { FirebaseAuthService } from './firebase/firebase-auth.service';
+import { FirebaseAuthGuard } from './firebase/firebase-auth.guard';
 
 @Module({
-  imports: [ScheduleModule.forRoot(), AqModule, UserModule],
+  imports: [
+    ConfigModule.forRoot(),
+    ScheduleModule.forRoot(),
+    AqModule,
+    UserModule,
+  ],
   controllers: [AppController, UserController],
-  providers: [AppService, PrismaService],
+  providers: [
+    AppService,
+    PrismaService,
+    FirebaseAuthService,
+    FirebaseAuthGuard,
+  ],
 })
 export class AppModule {}

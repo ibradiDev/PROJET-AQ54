@@ -1,12 +1,14 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, UseGuards } from '@nestjs/common';
 import { AqService } from './aq.service';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { FirebaseAuthGuard } from 'src/firebase/firebase-auth.guard';
 
 @Controller('air-quality')
 export class AqController {
   constructor(private aqService: AqService) {}
 
-  @Get('current')
+  @Get('api/current')
+  @UseGuards(FirebaseAuthGuard)
   @ApiOperation({ summary: 'Get realtime data for the two stations' })
   @ApiResponse({
     status: 200,
@@ -16,7 +18,8 @@ export class AqController {
     return await this.aqService.getCurrentStationData();
   }
 
-  @Get('hourly-avg')
+  @Get('api/hourly-avg')
+  @UseGuards(FirebaseAuthGuard)
   @ApiOperation({
     summary: 'Get latest hourly average data for the two stations',
   })
