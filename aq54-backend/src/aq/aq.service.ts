@@ -5,7 +5,6 @@ import { StationDataDto } from 'src/dto/station-data.dto';
 import { Cron, Interval } from '@nestjs/schedule';
 import { ConfigService } from '@nestjs/config';
 
-
 const configService = new ConfigService();
 const AQ_API = axios.create({ baseURL: configService.get<string>('AQ_API') });
 const STATION_1_NAME: string = configService.get<string>('STATION_1_NAME');
@@ -81,18 +80,18 @@ export class AqService implements OnApplicationBootstrap {
   private async setCurrentsValues() {
     try {
       // Récupération des données pour les stations depuis l'API
-      const station1 = await AQ_API.get(`/getCurrentValues/SMART188`);
-      const station2 = await AQ_API.get(`/getCurrentValues/SMART189`);
+      const station1 = await AQ_API.get(`/getCurrentValues/${STATION_1_NAME}`);
+      const station2 = await AQ_API.get(`/getCurrentValues/${STATION_2_NAME}`);
 
-      let partialStation1Data: StationDataDto = new StationDataDto();
-      let partialStation2Data: StationDataDto = new StationDataDto();
+      const partialStation1Data: StationDataDto = new StationDataDto();
+      const partialStation2Data: StationDataDto = new StationDataDto();
 
       // Je map les valeurs pour les station 1 & 2
-      station1.data.values.map((v) => {
-        partialStation1Data[v.sensor] = v.value;
+      station1.data.values.map((data) => {
+        partialStation1Data[data.sensor] = data.value;
       });
-      station2.data.values.map((v) => {
-        partialStation2Data[v.sensor] = v.value;
+      station2.data.values.map((data) => {
+        partialStation2Data[data.sensor] = data.value;
       });
 
       // Constitution des objets de données pour les deux stations
@@ -145,7 +144,7 @@ export class AqService implements OnApplicationBootstrap {
   }
 
   /**
-   * Récupère et enregistre de façon horaire les dernières données collectées  par les capteurs
+   * Récupère et enregistre de façon horaire les dernières données collectées par les capteurs
    */
   private async setStationsHourlyAvg() {
     const lastS1HourlyAvg = await this.getLastStationHourlyAvg({
@@ -233,7 +232,7 @@ export class AqService implements OnApplicationBootstrap {
   }): Promise<StationDataDto> {
     const response = await AQ_API.get(`/v3/getStationHourlyAvg/${station_id}`);
     const lastHourlyAvg = response.data.data.slice(-1)[0];
-    const lastStationHourlyAvg: StationDataDto = {
+    return {
       station_name: response.data.header.station_name,
       extT: lastHourlyAvg.T,
       co: lastHourlyAvg.CO,
@@ -244,11 +243,10 @@ export class AqService implements OnApplicationBootstrap {
       rh: lastHourlyAvg.RH,
       timestamp: lastHourlyAvg.timestamp,
     };
-    return lastStationHourlyAvg;
   }
 
   private async handleInitialTask() {
-    this.handleIntervalTask();
-    this.handleHourlyTask();
+    await this.handleIntervalTask();
+    await this.handleHourlyTask();
   }
 }

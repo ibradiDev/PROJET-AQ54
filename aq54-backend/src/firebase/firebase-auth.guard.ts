@@ -14,14 +14,13 @@ export class FirebaseAuthGuard implements CanActivate {
     const authHeader = request.headers.authorization;
 
     if (!authHeader) {
-      throw new UnauthorizedException("Aucun token d'autorisation fourni");
+      throw new UnauthorizedException('Accès non autorisé');
     }
 
     const token = authHeader.split(' ')[1];
     try {
-      const decodedToken = await admin.auth().verifyIdToken(token);
       // console.log('Token décodé:', decodedToken);
-      request.user = decodedToken;
+      request.user = await admin.auth().verifyIdToken(token);
       return true;
     } catch (error) {
       console.error('Erreur de vérification du token:', error);
